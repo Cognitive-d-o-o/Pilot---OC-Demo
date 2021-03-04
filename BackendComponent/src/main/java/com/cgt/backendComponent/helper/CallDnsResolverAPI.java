@@ -7,10 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
@@ -36,7 +33,7 @@ public class CallDnsResolverAPI {
 		
 		try {
 		RestTemplate rt = new RestTemplate();
-		ResponseEntity<String> response = (rt.exchange(url, HttpMethod.GET, setHeader(), String.class));
+		ResponseEntity<String> response = (rt.exchange(url, HttpMethod.GET, null, String.class));
 		
 		DnsApiModel h = parseBody(response);
 		
@@ -60,12 +57,6 @@ public class CallDnsResolverAPI {
 			CustomLogger.formatLogMessage("ERROR", loggerID, "CallDnsResolverAPI", "getIP", "RestClientException", e);
 			throw new InternalServerError(e.getMessage(), "5");
 		}
-	}
-	
-	private static HttpEntity<String> setHeader() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		return new HttpEntity<String>(headers);
 	}
 	
 	private static DnsApiModel parseBody(ResponseEntity<String> response) {
