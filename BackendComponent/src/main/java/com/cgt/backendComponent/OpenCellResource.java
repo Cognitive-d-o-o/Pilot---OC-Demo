@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cgt.backendComponent.configUtils.ConfigUtils;
 import com.cgt.backendComponent.exception.InternalServerError;
 import com.cgt.backendComponent.helper.CustomLogger;
+import com.cgt.backendComponent.helper.ErrorCode;
 import com.cgt.backendComponent.model.CellModel;
 import com.cgt.backendComponent.service.OpenCellService;
 
@@ -30,13 +31,23 @@ public class OpenCellResource {
 	public ResponseEntity<CellModel> getCell(@RequestParam Optional<String> mcc, @RequestParam Optional<String> mnc,
 			@RequestParam Optional<String> lac, @RequestParam Optional<String> cellid) {
 		UUID loggerID = UUID.randomUUID();
-		if(!mcc.isPresent() || !mnc.isPresent() || !lac.isPresent() || !cellid.isPresent()) {
-			throw new InternalServerError("All of these (mcc, mnc, lac, cellid) parameters must be provided!", "1");
-		}
-
 		CustomLogger.formatLogMessage("INFO", loggerID, "OpenCellResource", "getCell", "Get cell API invoked");
 
+		if (!mcc.isPresent() || !mnc.isPresent() || !lac.isPresent() || !cellid.isPresent()) {
+			String message = "All of these (mcc, mnc, lac, cellid) parameters must be presented!";
+			CustomLogger.formatLogMessage("ERROR", loggerID, "OpenCellResource", "getCell", "CustomException", message);
+			throw new InternalServerError(message, ErrorCode.internalServerErrorCode);
+		}
+
+		if (mcc.get().trim().equals("") || mnc.get().trim().equals("") || lac.get().trim().equals("") || cellid.get().trim().equals("")) {
+			String message = "Each of these (mcc, mnc, lac, cellid) parameters must not be empty!";
+			CustomLogger.formatLogMessage("ERROR", loggerID, "OpenCellResource", "getCell", "CustomException", message);
+			throw new InternalServerError(message, ErrorCode.internalServerErrorCode);
+		}
+
 		ResponseEntity<CellModel> returnedStation = stationService.getCell(mcc, mnc, lac, cellid, config, loggerID);
+
+		CustomLogger.formatLogMessage("INFO", loggerID, "OpenCellResource", "getCell", "Cell API finished");
 
 		return returnedStation;
 	}

@@ -49,10 +49,10 @@ public class CallOpenCellAPI {
 		} catch (HttpStatusCodeException e) {
 			CustomLogger.formatLogMessage("ERROR", loggerID, "CallOpenCellAPI", "getCell", "HttpStatusCodeException",
 					e);
-			throw new InternalServerError(e.getMessage(), "5");
+			throw new InternalServerError(e.getMessage(), ErrorCode.internalServerErrorCode);
 		} catch (RestClientException e) {
 			CustomLogger.formatLogMessage("ERROR", loggerID, "CallOpenCellAPI", "getCell", "RestClientException", e);
-			throw new InternalServerError(e.getMessage(), "5");
+			throw new InternalServerError(e.getMessage(), ErrorCode.internalServerErrorCode);
 		}
 
 	}
