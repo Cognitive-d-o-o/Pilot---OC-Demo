@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.cgt.backendComponent.configUtils.ConfigUtils;
 import com.cgt.backendComponent.exception.InternalServerError;
 import com.cgt.backendComponent.helper.CallOpenCellAPI;
+import com.cgt.backendComponent.helper.CustomLogger;
+import com.cgt.backendComponent.helper.ErrorCode;
 import com.cgt.backendComponent.model.CellModel;
 
 @Service
@@ -20,21 +22,18 @@ public class OpenCellService {
 
 		CellModel station = CallOpenCellAPI.getCell(mcc, mnc, lac, cellid, config, loggerID);
 
-		try {
-			if (station.getMessage() != null) {
-				throw new InternalServerError(station.getMessage(), "5");
-			}
-
-			if (station.getError() != null) {
-				throw new InternalServerError(station.getError(), station.getCode());
-			}
-
-			
-		} catch (Exception e) {
-			throw new InternalServerError(e.getMessage(), "5");
+		if (station.getMessage() != null) {
+			CustomLogger.formatLogMessage("ERROR", loggerID, "OpenCellService", "getCell",
+					"CustomException", station.getMessage());
+			throw new InternalServerError(station.getMessage(), ErrorCode.internalServerErrorCode);
 		}
-		
-		 
+
+		if (station.getError() != null) {
+			CustomLogger.formatLogMessage("ERROR", loggerID, "OpenCellService", "getCell",
+					"CustomException", station.getError());
+			throw new InternalServerError(station.getError(), station.getCode());
+		}
+
 		return new ResponseEntity<CellModel>(station, HttpStatus.OK);
 	}
 
