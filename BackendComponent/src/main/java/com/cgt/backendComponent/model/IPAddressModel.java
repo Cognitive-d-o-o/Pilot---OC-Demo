@@ -3,23 +3,23 @@ package com.cgt.backendComponent.model;
 import java.util.List;
 
 public class IPAddressModel {
-	private List<String> IpAddress;
+	private List<String> addresses;
 
 	public IPAddressModel() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public IPAddressModel(List<String> IpAddress) {
+	public IPAddressModel(List<String> addresses) {
 		super();
-		this.IpAddress = IpAddress;
+		this.addresses = addresses;
 	}
 
 	public List<String> getAddresses() {
-		return IpAddress;
+		return addresses;
 	}
 
-	public void setAddresses(List<String> IpAddress) {
-		this.IpAddress = IpAddress;
+	public void setAddresses(List<String> addresses) {
+		this.addresses = addresses;
 	}
 	
 	
