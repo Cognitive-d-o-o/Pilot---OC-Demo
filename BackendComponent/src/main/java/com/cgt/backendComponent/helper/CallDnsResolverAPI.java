@@ -33,7 +33,7 @@ public class CallDnsResolverAPI {
 		
 		try {
 		RestTemplate rt = new RestTemplate();
-		ResponseEntity<String> response = (rt.exchange(url, HttpMethod.GET, null, String.class));
+		ResponseEntity<String> response = rt.exchange(url, HttpMethod.GET, null, String.class);
 		
 		DnsApiModel h = parseBody(response);
 		
@@ -50,8 +50,7 @@ public class CallDnsResolverAPI {
 	
 		return new IPAddressModel(addresses);
 		} catch (HttpStatusCodeException e) {
-			CustomLogger.formatLogMessage("ERROR", loggerID, "CallDnsResolverAPI", "getIP", "HttpStatusCodeException",
-					e);
+			CustomLogger.formatLogMessage("ERROR", loggerID, "CallDnsResolverAPI", "getIP", "HttpStatusCodeException", e);
 			throw new InternalServerError(e.getMessage(), "5");
 		} catch (RestClientException e) {
 			CustomLogger.formatLogMessage("ERROR", loggerID, "CallDnsResolverAPI", "getIP", "RestClientException", e);
@@ -60,7 +59,7 @@ public class CallDnsResolverAPI {
 	}
 	
 	private static DnsApiModel parseBody(ResponseEntity<String> response) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		Gson gson = new GsonBuilder().create();
 		return gson.fromJson(response.getBody(), DnsApiModel.class);
 	}
 	
