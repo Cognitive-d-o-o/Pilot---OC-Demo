@@ -21,6 +21,4 @@ public class IPAddressModel {
 	public void setAddresses(List<String> addresses) {
 		this.addresses = addresses;
 	}
-	
-	
 }
