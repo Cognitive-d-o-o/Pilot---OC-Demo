@@ -10,7 +10,14 @@ public class ConfigUtils {
 	private String key;
 	private String format;
 	private String openCellAPIUrl;
-	
+	private String dnsApiEndpoint;
+
+	public String getDnsApiEndpoint() {
+		return dnsApiEndpoint;
+	}
+	public void setDnsApiEndpoint(String dnsApiEndpoint) {
+		this.dnsApiEndpoint = dnsApiEndpoint;
+	}
 	
 	public String getKey() {
 		return key;
