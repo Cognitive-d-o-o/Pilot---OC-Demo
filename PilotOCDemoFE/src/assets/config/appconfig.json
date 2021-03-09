@@ -1,0 +1,4 @@
+{
+    "dnsApiUrl":"http://localhost:9090/backendComponent/resolveHostname",
+    "cellTowerAPI":"http://localhost:9090/backendComponent/cell"
+}

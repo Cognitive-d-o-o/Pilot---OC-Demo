@@ -36,5 +36,4 @@ public class OpenCellService {
 
 		return new ResponseEntity<CellModel>(station, HttpStatus.OK);
 	}
-
 }

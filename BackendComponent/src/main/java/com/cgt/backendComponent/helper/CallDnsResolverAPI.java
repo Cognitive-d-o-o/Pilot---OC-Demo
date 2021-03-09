@@ -21,34 +21,36 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class CallDnsResolverAPI {
-	
+
 	public static IPAddressModel callDnsApi(Optional<String> hostname, ConfigUtils config, UUID loggerID) {
 		UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(config.getDnsApiEndpoint());
 		builder.queryParam("name", hostname.get());
-		
+
 		String url = builder.build().toString();
-		
+
 		CustomLogger.formatLogMessage("DEBUG", loggerID, "CallDnsResolverAPI", "getIP",
 				"Final URL before calling DNSResolverAPI ->  " + url);
-		
+
 		try {
-		RestTemplate rt = new RestTemplate();
-		ResponseEntity<String> response = rt.exchange(url, HttpMethod.GET, null, String.class);
-		
-		DnsApiModel h = parseBody(response);
-		
-		if(h.getStatus().equals("3")) {
-			CustomLogger.formatLogMessage("INFO", loggerID, "Unknown hostname " + hostname.get());
-			return new IPAddressModel(Collections.emptyList());
-		}
-		
-		List<String> addresses = new ArrayList<String>();
-		
-		for(Iterator<HashMap<String, String>> ans = h.getAnswer().iterator(); ans.hasNext();) {
-			addresses.add(ans.next().get("data"));
-		}
-	
-		return new IPAddressModel(addresses);
+			RestTemplate rt = new RestTemplate();
+			ResponseEntity<String> response = rt.exchange(url, HttpMethod.GET, null, String.class);
+
+			DnsApiModel h = parseBody(response);
+
+			if (h.getStatus().equals("3")) {
+				CustomLogger.formatLogMessage("INFO", loggerID, "Unknown hostname " + hostname.get());
+				return new IPAddressModel(Collections.emptyList());
+			}
+
+			List<String> addresses = new ArrayList<String>();
+
+			if (h.getAnswer() != null) {
+				for (Iterator<HashMap<String, String>> ans = h.getAnswer().iterator(); ans.hasNext();) {
+					addresses.add(ans.next().get("data"));
+				}
+			}
+
+			return new IPAddressModel(addresses);
 		} catch (HttpStatusCodeException e) {
 			CustomLogger.formatLogMessage("ERROR", loggerID, "CallDnsResolverAPI", "getIP", "HttpStatusCodeException", e);
 			throw new InternalServerError(e.getMessage(), "5");
@@ -57,10 +59,9 @@ public class CallDnsResolverAPI {
 			throw new InternalServerError(e.getMessage(), "5");
 		}
 	}
-	
+
 	private static DnsApiModel parseBody(ResponseEntity<String> response) {
 		Gson gson = new GsonBuilder().create();
 		return gson.fromJson(response.getBody(), DnsApiModel.class);
 	}
-	
 }
