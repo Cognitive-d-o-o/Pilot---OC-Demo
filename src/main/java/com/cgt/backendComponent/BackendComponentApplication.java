@@ -7,9 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class BackendComponentApplication extends SpringBootServletInitializer {
+public class BackendComponentApplication {
 
-	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder) {
 		return springApplicationBuilder.sources(BackendComponentApplication.class).properties(getProperties());
 	}
