@@ -26,6 +26,7 @@ public class DnsResolverResource {
 	
 	@GetMapping()
 	public ResponseEntity<IPAddressModel> getIpAddress(@RequestParam Optional<String> hostname) throws Exception {
+		System.out.println("TEST TEST TEST TEKTON PIPELINE DEMO");
 		UUID loggerID = UUID.randomUUID();
 		if(!hostname.isPresent()) {
 			throw new InternalServerError("hostname parameter must be provided!", "1");

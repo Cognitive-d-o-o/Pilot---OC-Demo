@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 @SpringBootApplication
 public class BackendComponentApplication {
-
+	
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder) {
 		return springApplicationBuilder.sources(BackendComponentApplication.class).properties(getProperties());
 	}
